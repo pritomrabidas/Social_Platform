@@ -30,6 +30,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
