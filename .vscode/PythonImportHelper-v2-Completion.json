@@ -67,6 +67,30 @@
         "documentation": {}
     },
     {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
@@ -140,6 +164,14 @@
     },
     {
         "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "messages",
         "importPath": "django.contrib",
         "description": "django.contrib",
         "isExtraImport": true,
@@ -403,7 +435,7 @@
         "documentation": {}
     },
     {
-        "label": "render",
+        "label": "redirect",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -472,6 +504,47 @@
         "description": "django.shortcuts",
         "isExtraImport": true,
         "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_HOST_USER",
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "isExtraImport": true,
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "send_mail",
+        "importPath": "django.core.mail",
+        "description": "django.core.mail",
+        "isExtraImport": true,
+        "detail": "django.core.mail",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
         "documentation": {}
     },
     {
@@ -497,14 +570,6 @@
         "description": "pathlib",
         "isExtraImport": true,
         "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
-        "isExtraImport": true,
-        "detail": "django.conf",
         "documentation": {}
     },
     {
@@ -551,6 +616,24 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0003_customuser_is_varified_customuser_otp_and_more",
+        "description": "accounts.migrations.0003_customuser_is_varified_customuser_otp_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('accounts', '0002_customuser_image'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='customuser',\n            name='is_varified',\n            field=models.BooleanField(default=False),\n        ),",
+        "detail": "accounts.migrations.0003_customuser_is_varified_customuser_otp_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0004_rename_full_name_customuser_fullname",
+        "description": "accounts.migrations.0004_rename_full_name_customuser_fullname",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('accounts', '0003_customuser_is_varified_customuser_otp_and_more'),\n    ]\n    operations = [\n        migrations.RenameField(\n            model_name='customuser',\n            old_name='full_name',\n            new_name='fullname',\n        ),",
+        "detail": "accounts.migrations.0004_rename_full_name_customuser_fullname",
+        "documentation": {}
+    },
+    {
         "label": "AccountsConfig",
         "kind": 6,
         "importPath": "accounts.apps",
@@ -564,7 +647,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class CustomUser(AbstractUser):\n    email = models.EmailField(unique=True)\n    full_name = models.CharField(max_length=100)\n    city = models.CharField(max_length=100)\n    country = models.CharField(max_length=100)\n    image = models.ImageField(upload_to='profile_pics', default='default.jpg')\n    def __str__(self):\n        return self.email",
+        "peekOfCode": "class CustomUser(AbstractUser):\n    email = models.EmailField(unique=True)\n    fullname = models.CharField(max_length=100)\n    city = models.CharField(max_length=100)\n    country = models.CharField(max_length=100)\n    image = models.ImageField(upload_to='profile_pics', default='default.jpg')\n    is_varified = models.BooleanField(default=False)\n    is_active = models.BooleanField(default=True)\n    otp = models.CharField(max_length=4, blank=True, null=True)\n    def __str__(self):",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -582,16 +665,16 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def Register(request):\n    return render(request, 'Account/registration.html')\ndef Login(request):\n    return render(request, 'Account/login.html')\ndef otp(request):\n    return render(request, 'Account/otp.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "peekOfCode": "def Register(request):\n    if request.method == 'POST':\n        fullname = request.POST.get('fullname')\n        username = request.POST.get('username')\n        email = request.POST.get('email')\n        city = request.POST.get('city')\n        country = request.POST.get('country')\n        password = request.POST.get('password')\n        confirm_password = request.POST.get('confirm_password')\n        # if CustomUser.objects.filter(username=username).exists():",
         "detail": "accounts.views",
         "documentation": {}
     },
     {
-        "label": "Login",
+        "label": "registration_Email",
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def Login(request):\n    return render(request, 'Account/login.html')\ndef otp(request):\n    return render(request, 'Account/otp.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "peekOfCode": "def registration_Email(otp, email):\n    subject = \"Welcome to Our Website\"\n    message = f\"Thank you for registering with us. Your OTP is: {otp}\"\n    from_email = settings.EMAIL_HOST_USER\n    recipient_list = [email]\n    send_mail(subject, message, from_email, recipient_list)\ndef otp(request):\n    return render(request, 'Account/otp.html')\ndef Login(request):\n    return render(request, 'Account/login.html')",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -600,7 +683,16 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def otp(request):\n    return render(request, 'Account/otp.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "peekOfCode": "def otp(request):\n    return render(request, 'Account/otp.html')\ndef Login(request):\n    return render(request, 'Account/login.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "Login",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def Login(request):\n    return render(request, 'Account/login.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -798,7 +890,7 @@
         "kind": 5,
         "importPath": "config.settings",
         "description": "config.settings",
-        "peekOfCode": "MEDIA_URL = 'media/'\nMEDIA_ROOT = BASE_DIR / 'media'\nSTATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'",
+        "peekOfCode": "MEDIA_URL = 'media/'\nMEDIA_ROOT = BASE_DIR / 'media'\nSTATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'",
         "detail": "config.settings",
         "documentation": {}
     },
@@ -807,7 +899,7 @@
         "kind": 5,
         "importPath": "config.settings",
         "description": "config.settings",
-        "peekOfCode": "MEDIA_ROOT = BASE_DIR / 'media'\nSTATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\n# EMAIL_HOST = 'smtp.gmail.com'",
+        "peekOfCode": "MEDIA_ROOT = BASE_DIR / 'media'\nSTATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.gmail.com'",
         "detail": "config.settings",
         "documentation": {}
     },
@@ -816,7 +908,7 @@
         "kind": 5,
         "importPath": "config.settings",
         "description": "config.settings",
-        "peekOfCode": "STATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\n# EMAIL_HOST = 'smtp.gmail.com'\n# EMAIL_PORT = 587",
+        "peekOfCode": "STATICFILES_DIRS = [\n    BASE_DIR / 'static',\n]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587",
         "detail": "config.settings",
         "documentation": {}
     },
@@ -825,7 +917,7 @@
         "kind": 5,
         "importPath": "config.settings",
         "description": "config.settings",
-        "peekOfCode": "STATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\n# EMAIL_HOST = 'smtp.gmail.com'\n# EMAIL_PORT = 587\n# EMAIL_USE_TLS = True\n# EMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\n# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER",
+        "peekOfCode": "STATIC_ROOT = BASE_DIR / 'staticfiles'\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER",
         "detail": "config.settings",
         "documentation": {}
     },
@@ -834,7 +926,79 @@
         "kind": 5,
         "importPath": "config.settings",
         "description": "config.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\n# EMAIL_HOST = 'smtp.gmail.com'\n# EMAIL_PORT = 587\n# EMAIL_USE_TLS = True\n# EMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\n# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER\n# EMAIL_HOST_PASSWORD = 'kkfx ahue pjhg oycc' \n# CONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_BACKEND",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_HOST",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_PORT",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_USE_TLS",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_HOST_USER",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_HOST_USER = 'pritomrabidas102@gmail.com'\nDEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_FROM_EMAIL",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "DEFAULT_FROM_EMAIL = EMAIL_HOST_USER\nEMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_HOST_PASSWORD",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "EMAIL_HOST_PASSWORD = 'rwgz wfza stnw jxii' \nCONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
+        "detail": "config.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CONTACT_EMAIL",
+        "kind": 5,
+        "importPath": "config.settings",
+        "description": "config.settings",
+        "peekOfCode": "CONTACT_EMAIL = 'pritomrabidas102@gmail.com'",
         "detail": "config.settings",
         "documentation": {}
     },
