@@ -6,4 +6,5 @@ urlpatterns = [
     path('login/', Login, name='login'),
     path('otp/', otp, name='otp'),
     path('forget/', forget, name='forget'),
+    path('resend_otp/', resend_otp, name='resend_otp'),
 ]

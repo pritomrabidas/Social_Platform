@@ -507,6 +507,22 @@
         "documentation": {}
     },
     {
+        "label": "authenticate",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
         "label": "EMAIL_HOST_USER",
         "importPath": "config.settings",
         "description": "config.settings",
@@ -656,7 +672,7 @@
         "kind": 5,
         "importPath": "accounts.urls",
         "description": "accounts.urls",
-        "peekOfCode": "urlpatterns = [\n    path('register/', Register, name='register'),\n    path('login/', Login, name='login'),\n    path('otp/', otp, name='otp'),\n    path('forget/', forget, name='forget'),\n]",
+        "peekOfCode": "urlpatterns = [\n    path('register/', Register, name='register'),\n    path('login/', Login, name='login'),\n    path('otp/', otp, name='otp'),\n    path('forget/', forget, name='forget'),\n    path('resend_otp/', resend_otp, name='resend_otp'),\n]",
         "detail": "accounts.urls",
         "documentation": {}
     },
@@ -665,7 +681,7 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def Register(request):\n    if request.method == 'POST':\n        fullname = request.POST.get('fullname')\n        username = request.POST.get('username')\n        email = request.POST.get('email')\n        city = request.POST.get('city')\n        country = request.POST.get('country')\n        password = request.POST.get('password')\n        confirm_password = request.POST.get('confirm_password')\n        # if CustomUser.objects.filter(username=username).exists():",
+        "peekOfCode": "def Register(request):\n    if request.method == 'POST':\n        fullname = request.POST.get('fullname')\n        username = request.POST.get('username')\n        email = request.POST.get('email')\n        city = request.POST.get('city')\n        country = request.POST.get('country')\n        password = request.POST.get('password')\n        confirm_password = request.POST.get('confirm_password')\n        if CustomUser.objects.filter(username=username).exists():",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -674,7 +690,7 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def registration_Email(otp, email):\n    subject = \"Welcome to Our Website\"\n    message = f\"Thank you for registering with us. Your OTP is: {otp}\"\n    from_email = settings.EMAIL_HOST_USER\n    recipient_list = [email]\n    send_mail(subject, message, from_email, recipient_list)\ndef otp(request):\n    return render(request, 'Account/otp.html')\ndef Login(request):\n    return render(request, 'Account/login.html')",
+        "peekOfCode": "def registration_Email(otp, email):\n    subject = \"Welcome to Our Website\"\n    message = f\"Thank you for registering with us. Your OTP is: {otp}\"\n    from_email = settings.EMAIL_HOST_USER\n    recipient_list = [email]\n    send_mail(subject, message, from_email, recipient_list)\ndef otp(request):\n    otp = request.POST.get('otp')\n    if request.method == 'POST':\n        if otp:",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -683,7 +699,16 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def otp(request):\n    return render(request, 'Account/otp.html')\ndef Login(request):\n    return render(request, 'Account/login.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "peekOfCode": "def otp(request):\n    otp = request.POST.get('otp')\n    if request.method == 'POST':\n        if otp:\n            try:\n                user = CustomUser.objects.get(otp=otp)\n                user.is_varified = True\n                user.save()\n                return redirect('login')\n            except CustomUser.DoesNotExist:",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "resend_otp",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def resend_otp(request):\n    email = request.session.get('email')\n    if email:\n        try:\n            user = CustomUser.objects.get(email=email)\n            otp = random.randint(1000, 9999)\n            user.otp = otp\n            user.save()\n            registration_Email(otp, email)\n            messages.success(request, \"OTP has been resent to your email.\")",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -692,7 +717,7 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def Login(request):\n    return render(request, 'Account/login.html')\ndef forget(request):\n    return render(request, 'Account/forget.html')",
+        "peekOfCode": "def Login(request):\n    if request.method == 'POST':\n        identifier = request.POST.get('identifier')\n        password = request.POST.get('password')\n        user = None\n        if CustomUser.objects.filter(email=identifier).exists():\n            username = CustomUser.objects.get(email=identifier).username\n            user = authenticate(request, username=username, password=password)\n        elif CustomUser.objects.filter(username=identifier).exists():\n            user = authenticate(request, username=identifier, password=password)",
         "detail": "accounts.views",
         "documentation": {}
     },

@@ -47,16 +47,22 @@
   <h2 class="form-title">Enter OTP</h2>
   <p class="text-center mb-4">We’ve sent a 4-digit code to your email. Please enter it below.</p>
 
-  <form>
+  <form method="POST">
+    {% csrf_token %}
     <div class="d-flex justify-content-center mb-4">
-      <input type="text" class="form-control otp-input" maxlength="4" required>
+      <input name="otp" type="text" class="form-control otp-input" maxlength="4" required>
       
     </div>
 
     <button type="submit" class="btn btn-linkedin w-100 mb-3">Verify OTP</button>
-    
+    {% if messages %} 
+        {% for message in messages %}
+        <div class="alert" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %} {% endif %}
     <p class="text-center">
-      Didn't receive the code? <a href="#">Resend OTP</a>
+      Didn't receive the code? <a href="{% url 'resend_otp' %}">Resend OTP</a>
     </p>
   </form>
 </div>
