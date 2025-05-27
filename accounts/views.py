@@ -6,6 +6,7 @@ from .models import CustomUser
 from django.core.mail import send_mail
 from django.conf import settings
 import random
+
 # Create your views here.
 def Register(request):
     if request.method == 'POST':
@@ -49,7 +50,6 @@ def registration_Email(otp, email):
     from_email = settings.EMAIL_HOST_USER
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list)
-
 
 def otp(request):
     otp = request.POST.get('otp')
@@ -109,7 +109,50 @@ def Login(request):
 
     return render(request, 'Account/login.html')
 
+def forget_email(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = CustomUser.objects.filter(email=email).first()
+        if user:
+            otp = random.randint(1000, 9999)
+            user.otp = otp
+            user.save()
+            registration_Email(otp, email)
+            return redirect('forget_otp')
+        else:
+            messages.error(request, "Email not found. Please try again.")
+            return render(request, 'Account/forget_email.html')
+    return render(request, 'Account/forget_email.html')
 
+def forget_otp(request):
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        if otp:
+            user = CustomUser.objects.filter(otp=otp).first()
+            if user:
+                user.is_varified = True
+                user.save()
+                messages.success(request, "OTP verified successfully. You can now reset your password.")
+                return redirect('forget')
+            else:
+                messages.error(request, "Invalid OTP. Please try again.")
+                return render(request, 'Account/forgetOTP.html')
+    return render(request, 'Account/forgetOTP.html')
 
 def forget(request):
+    if request.method == 'POST':
+        pass1 = request.POST.get('pass1')
+        pass2 = request.POST.get('pass2')
+        user = CustomUser.objects.filter(is_varified=True).first()
+        if user:
+            if pass1 == pass2:
+                user.set_password(pass1)
+                user.save()
+                messages.success(request, "Password reset successfully. You can now log in.")
+                return redirect('home')
+            else:
+                messages.error(request, "Passwords do not match. Please try again.")
+                return render(request, 'Account/forget.html')
+        else:
+            messages.error(request, "User not found. Please try again.")
     return render(request, 'Account/forget.html')
